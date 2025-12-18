@@ -25,4 +25,3 @@ Thanks for your interest in contributing!
 ## Reporting Bugs
 
 Use GitHub Issues with a minimal reproduction and your environment (OS, Python version, MoviePy version).
-

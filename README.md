@@ -1,78 +1,137 @@
-# pyShortVid2Gif-Engine: Video to GIF Converter
+# ---
 
-[![CI](https://github.com/socialandrc/pyShortVid2Gif-Engine/actions/workflows/lint-test.yml/badge.svg?branch=main)](https://github.com/socialandrc/pyShortVid2Gif-Engine/actions/workflows/lint-test.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python 3.10–3.12](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](#)
+**pyShortVid2Gif-Engine**
 
-A simple GUI and CLI for converting videos to GIFs using MoviePy.
+A simple GUI and CLI for converting videos to GIFs using MoviePy. Ideal for short videos and clips.
 
-## Prerequisites
+## ---
 
-- Python 3.10+
-- FFmpeg (optional, recommended for better performance)
+**✨ Features**
 
-### Install FFmpeg (Ubuntu/Debian)
+* **GUI**: Drag-and-drop interface with live file size and frame count estimation.  
+* **CLI**: Command-line control for batch processing and long videos.  
+* **Flexible Backends**: Use imageio (no dependencies) or ffmpeg (faster, smaller files).  
+* **Precision Trimming**: Optional start/end time control.  
+* **Optimization**: Adjustable resize percentage and FPS control.  
+* **Cross-platform**: Seamlessly runs on Windows, macOS, and Linux.
 
-```bash
-sudo apt-get update
-sudo apt-get install -y ffmpeg
-```
+## ---
 
-## Setup
+**🚀 Getting Started**
 
-```bash
-python -m venv .venv
-. .venv/bin/activate
-pip install -r requirements.txt
-```
+### **Prerequisites**
 
-## GUI Usage
+* **Python**: 3.10, 3.11, or 3.12 (Python 3.13+ is currently not recommended due to Pillow compatibility).  
+* **FFmpeg (Recommended)**: For significantly faster processing and smaller files.
 
-```bash
+### **Installation**
+
+1. **Clone the repository:**  
+   Bash  
+   git clone https://github.com/socialandrc/pyShortVid2Gif-Engine.git  
+   cd pyShortVid2Gif-Engine
+
+2. **Install dependencies:**  
+   Bash  
+   pip install \-r requirements.txt
+
+3. **Install FFmpeg (Optional but Recommended):**  
+   * **Ubuntu/Debian:** sudo apt-get install ffmpeg  
+   * **macOS:** brew install ffmpeg  
+   * **Windows:** Download via [Gyan.dev](https://www.gyan.dev/ffmpeg/builds/) or use winget install ffmpeg.
+
+## ---
+
+**💻 Usage**
+
+### **GUI Mode**
+
+Best for visual editing and quick estimates.
+
+Bash
+
 python localvideo.py
-```
 
-**GUI Limitation:** Videos longer than **30 seconds** are disabled in the GUI. This is by design to prevent system overload and excessive file sizes. For longer videos, use the CLI.
+**Note:** The GUI limits video length to **30 seconds** to prevent system hangs. For longer clips, please use the CLI.
 
-- Drag & drop a video or select via dialog.
-- Configure:
-  - Output name and directory
-  - Resize percentage
-  - FPS
-  - Optional start/end trim
-  - Program: `imageio` (no FFmpeg needed) or `ffmpeg`
-  - Loop forever (imageio only)
-- Watch real-time estimated file size and frame count.
-- Convert and watch progress. If FFmpeg is missing, the app will warn and fall back to `imageio` when needed.
+### **CLI Mode**
 
-> **Tip:** Use the CLI for videos longer than 30 seconds or if you have large files and want full control.
+Best for automation and handling larger files.
 
-## CLI Usage
+Bash
 
-```bash
-python cli.py /path/to/video.mp4 \
-  --output out.gif \
-  --resize 50 \
-  --fps 15 \
-  --start 2 --end 8 \
-  --program imageio \
-  --loop
-```
+\# Basic usage  
+python cli.py /path/to/video.mp4 \--output out.gif
 
-### Smoke Test (no input video)
+\# Full optimization  
+python cli.py /path/to/video.mp4 \\  
+  \--output out.gif \\  
+  \--resize 50 \\  
+  \--fps 15 \\  
+  \--start 2 \\  
+  \--end 8 \\  
+  \--program ffmpeg \\  
+  \--loop
 
-```bash
-python cli.py --test --output test.gif
-```
+\# Run a smoke test to verify environment  
+python cli.py \--test \--output test.gif
 
-Generates a 1s red square GIF to verify environment.
+#### **CLI Options Reference**
 
-## Limitations & Notes
+| Option | Type | Default | Description |
+| :---- | :---- | :---- | :---- |
+| input | str | *Required* | Path to input video file |
+| \--output, \-o | str | out.gif | Output GIF filename |
+| \--resize, \-r | int | 100 | Resize percentage (1–100) |
+| \--fps, \-f | int | 10 | Frames per second |
+| \--start, \-s | float | \- | Start trim time (seconds) |
+| \--end, \-e | float | \- | End trim time (seconds) |
+| \--program, \-p | str | imageio | Backend: imageio or ffmpeg |
+| \--loop | flag | False | Loop GIF forever (imageio only) |
+| \--test | flag | False | Generate test GIF (no input needed) |
 
-- **GUI**: Videos longer than 30 seconds are not allowed (disabled button) to prevent system overload and excessive GIF file sizes. Use the **CLI** for longer videos at your discretion.
-- **Output Size**: Large videos with high FPS can produce very large GIF files. The GUI estimates output size; watch for warnings.
-- **Program**:
-  - `imageio` works without FFmpeg but may be slower for large videos and produce larger files.
-  - `ffmpeg` is faster and produces smaller files; the app falls back to `imageio` if unavailable.
-- **Performance**: Trimming long videos or very high resolutions may take time. Consider reducing FPS or resize percentage.
+## ---
 
+**🛠 Project Structure**
+
+Plaintext
+
+pyShortVid2Gif-Engine/  
+├── .github/workflows/      \# CI/CD configurations  
+├── tests/                  \# Unit tests  
+├── cli.py                  \# CLI entry point  
+├── localvideo.py           \# GUI application (Tkinter/CustomTkinter)  
+├── pyproject.toml          \# Project metadata  
+├── requirements.txt        \# Python dependencies  
+└── LICENSE                 \# MIT License
+
+## ---
+
+**⚠️ Performance & Troubleshooting**
+
+### **Backend Comparison**
+
+* **ffmpeg**: Recommended. Faster encoding and better compression.  
+* **imageio**: Best for portability. No external software required, but results in larger files.
+
+### **Common Issues**
+
+| Issue | Solution |
+| :---- | :---- |
+| **"FFmpeg not found"** | Install FFmpeg system-wide or switch to \--program imageio. |
+| **Pillow build fails** | Ensure you are on Python 3.10–3.12 or install Visual C++ Build Tools. |
+| **Large GIF size** | Lower the FPS, increase the Resize percentage, or trim the clip. |
+
+## ---
+
+**🤝 Contributing**
+
+Contributions are welcome\!
+
+1. Fork the repo.  
+2. Create a feature branch (git checkout \-b feature/AmazingFeature).  
+3. Commit your changes (git commit \-m 'Add some AmazingFeature').  
+4. Push to the branch (git push origin feature/AmazingFeature).  
+5. Open a Pull Request.
+
+**Author:** socialandrc
